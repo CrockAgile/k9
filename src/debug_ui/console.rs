@@ -709,9 +709,11 @@ impl DebugConsole {
                 log::trace!("trying to parse command: {}", text);
             }
 
-            let mut parse_trees = self
+            let parser = self
                 .command_grammar
-                .parse_input(&text);
+                .build_parser()
+                .expect("console command BNF grammar should be valid (no undefined nonterminals)");
+            let mut parse_trees = parser.parse_input(&text);
 
             let mut val = None;
             let mut pt_count = 0;
